@@ -150,6 +150,7 @@ void CameraDriver::ImageCallback(uvc_frame_t *frame) {
 
   assert(state_ == kRunning);
   assert(rgb_frame_);
+  ros::Time receipt_time = ros::Time::now();
 
   uvc_error_t conv_ret = uvc_any2rgb(frame, rgb_frame_);
 
@@ -165,9 +166,12 @@ void CameraDriver::ImageCallback(uvc_frame_t *frame) {
   image->step = image->width * 3;
   image->data.resize(image->step * image->height);
   memcpy(&(image->data[0]), rgb_frame_->data, rgb_frame_->data_bytes);
+  image->header.stamp = receipt_time;
+  image->header.frame_id = config_.frame_id;
 
-  sensor_msgs::CameraInfo::ConstPtr cinfo(
+  sensor_msgs::CameraInfo::Ptr cinfo(
     new sensor_msgs::CameraInfo(cinfo_manager_.getCameraInfo()));
+  cinfo->header = image->header;
 
   cam_pub_.publish(image, cinfo);
 
