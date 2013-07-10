@@ -191,8 +191,8 @@ void CameraDriver::AutoControlsCallback(
   void *data, size_t data_len) {
   boost::recursive_mutex::scoped_lock(mutex_);
 
-  printf("Controls callback. class: %d, event: %d, selector: %d, attr: %d, data_len: %u\n",
-         status_class, event, selector, status_attribute, data_len);
+//  printf("Controls callback. class: %d, event: %d, selector: %d, attr: %d, data_len: %u\n",
+//         status_class, event, selector, status_attribute, data_len);
 
   if (status_attribute == UVC_STATUS_ATTRIBUTE_VALUE_CHANGE) {
     switch (status_class) {
